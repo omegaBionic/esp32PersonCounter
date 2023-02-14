@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <!-- CSS -> Style -->
+      <style media="screen">
+         h1, h2, h3 {
+         text-align: center;
+         }
+         table,
+         td, tr {
+         border: 1px solid #333;
+         align: center;
+         }
+         table {
+         width: 50%;
+         }
+         thead,
+         tfoot {
+         background-color: #333;
+         color: #fff;
+         }
+         .center {
+         margin-left: auto;
+         margin-right: auto;
+         text-align: center;
+         vertical-align: middle;
+         }
+      </style>
+      <!-- Javascript -> Logic -->
+      <script type="text/javascript">
+        function removeLastDirectoryPartOf(the_url)
+        {
+            var the_arr = the_url.split('/');
+            the_arr.pop();
+            return( the_arr.join('/') );
+        }
+
+        function download(url, filename) {
+          fetch(url)
+            .then(response => response.blob())
+            .then(blob => {
+              const link = document.createElement("a");
+              link.href = URL.createObjectURL(blob);
+              link.download = filename;
+              link.click();
+          })
+          .catch(console.error);
+        }
+
+        function checkAndUncheck(){
+          // Define variables
+          var isChecked = false;
+          var inputs = document.getElementsByTagName('input');
+          var buttonCheckAll = document.getElementById("buttonCheckAll")
+
+          // Get if there is at least input checked
+          for (var i = 0; i < inputs.length; ++i) {
+            if (inputs[i].checked === true){
+              isChecked = true;
+              break;
+            }
+          }
+
+          // Check or unckeck input
+          for (var i = 0; i < inputs.length; ++i) {
+            inputs[i].checked = !isChecked;
+          }
+
+          // Update buttonCheckAll label
+          if (isChecked){
+              buttonCheckAll.value = "Tout cocher";
+          } else {
+              buttonCheckAll.value = "Tout décocher";
+          }
+        }
+
+        function downloadAllItems() {
+          // Define variables
+          var concatenateUrlForDownload = '';
+          var inputs = document.getElementsByTagName('input');
+
+          // Define const
+          const hostUrl = window.location.href;
+
+          for(var i = 0; i < inputs.length; ++i){
+            // if isChecked and no check button
+            if(inputs[i].checked && inputs[i].id != "buttonCheckAll"){
+              // Debug for display inputs id
+              console.log("inputs[i].id: '" + inputs[i].id + "'");
+
+              // Concatenate url from pwd
+              concatenateUrlForDownload = removeLastDirectoryPartOf(hostUrl) + "/" + inputs[i].id;
+              console.log("concatenateUrlForDownload: '" + concatenateUrlForDownload + "'");
+
+              // Download files
+              // TODO
+              //downloadURI(concatenateUrlForDownload, inputs[i].id);
+              //download(concatenateUrlForDownload, "file4.txt");
+            }
+          }
+          // Debug display full object
+          //console.log(inputs);
+
+        }
+      </script>
+   </head>
+   <!-- HTML -> Struct -->
+   <body>
+      <div>
+         <div>
+            <h1 class="center">Serveur de fichiers</h1>
+         </div>
+         <div>
+            <h3>😼 FabLab made in Iki 😼</h3>
+         </div>
+           <br>
+      </div>
+      <div>
+         <table class="center">
+            <thead>
+               <tr>
+                  <th colspan="2">Documents disponibles</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><input id="file1.txt" type="checkbox"></td>
+                  <td>file1.txt</td>
+               </tr>
+               <tr>
+                  <td><input id="file2.txt" type="checkbox"></td>
+                  <td>file2.txt</td>
+               </tr>
+               <tr>
+                  <td><input id="file3.txt" type="checkbox"></td>
+                  <td>file3.txt</td>
+               </tr>
+               <tr>
+                  <td><input id="file4.txt" type="checkbox"></td>
+                  <td>file4.txt</td>
+               </tr>
+               <tr>
+                  <td><input id="file5.txt" type="checkbox"></td>
+                  <td>file5.txt</td>
+               </tr>
+               <tr>
+                  <td><input id="file6.txt" type="checkbox"></td>
+                  <td>file6.txt</td>
+               </tr>
+            </tbody>
+         </table>
+         <div class="center">
+            <br>
+            <input onclick="checkAndUncheck()" type="button" value="Tout cocher" id="buttonCheckAll"/>
+            <button onclick="downloadAllItems()" type="submit">Tout télécharger</button>
+         </div>
+      </div>
+   </body>
+</html>
