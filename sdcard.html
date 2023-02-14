@@ -37,16 +37,14 @@
         return the_arr.join("/");
       }
 
-      function download(url, filename) {
-        fetch(url)
-          .then((response) => response.blob())
-          .then((blob) => {
-            const link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            link.click();
-          })
-          .catch(console.error);
+      function downloadURI(uri, name) {
+        var link = document.createElement("a");
+        link.download = name;
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        delete link;
       }
 
       function checkAndUncheck() {
@@ -78,11 +76,12 @@
 
       function downloadAllItems() {
         // Define variables
+        var fileName = "";
         var concatenateUrlForDownload = "";
         var inputs = document.getElementsByTagName("input");
 
         // Define const
-        const hostUrl = window.location.href;
+        const HOST_URL = window.location.href;
 
         for (var i = 0; i < inputs.length; ++i) {
           // if isChecked and no check button
@@ -92,15 +91,13 @@
 
             // Concatenate url from pwd
             concatenateUrlForDownload =
-              removeLastDirectoryPartOf(hostUrl) + "/" + inputs[i].id;
+              removeLastDirectoryPartOf(HOST_URL) + "/" + inputs[i].id;
             console.log(
               "concatenateUrlForDownload: '" + concatenateUrlForDownload + "'"
             );
 
             // Download files
-            // TODO
-            //downloadURI(concatenateUrlForDownload, inputs[i].id);
-            //download(concatenateUrlForDownload, "file4.txt");
+            downloadURI(concatenateUrlForDownload, inputs[i].id);
           }
         }
         // Debug display full object
