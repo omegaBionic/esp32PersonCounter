@@ -28,10 +28,10 @@ void initVarHtml()
   // debut du fichier index.html
   stDeb += "<!DOCTYPE html>\n";
   stDeb += "<html>\n";
-  stDeb += "<meta charset='utf-8'>\n";
+  stDeb += "<meta charset="+String('"')+"utf-8"+String('"')+"/>\n";
   stDeb += "  <head>\n";
   stDeb += "    <!-- CSS -> Style -->\n";
-  stDeb += "    <style media='screen'>\n";
+  stDeb += "    <style media="+String('"')+"screen"+String('"')+">\n";
   stDeb += "      h1,\n";
   stDeb += "      h2,\n";
   stDeb += "      h3 {\n";
@@ -58,69 +58,75 @@ void initVarHtml()
   stDeb += "        vertical-align: middle;\n";
   stDeb += "      }\n";
   stDeb += "    </style>\n";
+//
   stDeb += "    <!-- Javascript -> Logic -->\n";
-  stDeb += "    <script type='text/javascript>\n";
+  stDeb += "    <script type="+String('"')+"text/javascript"+String('"')+">\n";
+//
   stDeb += "      function removeLastDirectoryPartOf(the_url) {\n";
-  stDeb += "        var the_arr = the_url.split('/');\n";
+  stDeb += "        var the_arr = the_url.split("+String('"')+"/"+'"'+");\n";
   stDeb += "        the_arr.pop();\n";
-  stDeb += "        return the_arr.join('/');\n";
+  stDeb += "        return the_arr.join("+String('"')+"/"+String('"')+");\n";
   stDeb += "      }\n";
+//
+  stDeb += "      function downloadURI(uri, name){ \n";
+  stDeb += "        var link = document.createElement("+String('"')+"a"+'"'+");\n";
+  stDeb += "        link.download = name;\n";
+  stDeb += "        link.href = uri;\n";
+  stDeb += "        document.body.appendChild(link);\n";
+  stDeb += "        link.click();\n";
+  stDeb += "        document.body.removeChild(link);\n";
+  stDeb += "        delete link;\n";
+  stDeb += "      }\n";
+//
   stDeb += "      function download(dataurl, filename) {\n";
-  stDeb += "        const link = document.createElement('a');\n";
+  stDeb += "        const link = document.createElement("+String('"')+"a"+'"'+");\n";
   stDeb += "        link.href = dataurl;\n";
   stDeb += "        link.download = filename;\n";
   stDeb += "        link.click();\n";
   stDeb += "      }\n";
+//
   stDeb += "      function checkAndUncheck() {\n";
-          // Define variables
   stDeb += "        var isChecked = false;\n";
-  stDeb += "        var inputs = document.getElementsByTagName('input');\n";
-  stDeb += "        var buttonCheckAll = document.getElementById('buttonCheckAll');\n";
-          // Get if there is at least input checked
+  stDeb += "        var inputs = document.getElementsByTagName("+String('"')+"input"+'"'+");\n";
+  stDeb += "        var buttonCheckAll = document.getElementById("+String('"')+"buttonCheckAll"+'"'+");\n";
   stDeb += "        for (var i = 0; i < inputs.length; ++i) {\n";
   stDeb += "          if (inputs[i].checked === true) {\n";
   stDeb += "            isChecked = true;\n";
   stDeb += "            break;\n";
   stDeb += "          }\n";
   stDeb += "        }\n";
-          // Check or unckeck input
   stDeb += "        for (var i = 0; i < inputs.length; ++i) {\n";
   stDeb += "          inputs[i].checked = !isChecked;\n";
   stDeb += "        }\n";
-          // Update buttonCheckAll label
   stDeb += "        if (isChecked) {\n";
-  stDeb += "          buttonCheckAll.value = 'Tout cocher';\n";
+  stDeb += "          buttonCheckAll.value = "+String('"')+"Tout cocher"+String('"')+";\n";
   stDeb += "        } else {\n";
-  stDeb += "          buttonCheckAll.value = 'Tout decocher';\n";
+  stDeb += "          buttonCheckAll.value = "+String('"') +"Tout decocher"+String('"')+";\n";
   stDeb += "        }\n";
   stDeb += "      }\n";
+//  
   stDeb += "      function downloadAllItems() {\n";
-          // Define variables
-  stDeb += "        var concatenateUrlForDownload = "";\n";
-  stDeb += "        var inputs = document.getElementsByTagName('input');\n";
-          // Define const
-  stDeb += "        const hostUrl = window.location.href;\n";
-          // Download all checked items
+  stDeb += "        var concatenateUrlForDownload = "+String('"')+String('"')+";\n";
+  stDeb += "        var inputs = document.getElementsByTagName("+String('"')+"input"+'"'+");\n";
+  stDeb += "        const HOST_URL = window.location.href;\n";
   stDeb += "        for (var i = 0; i < inputs.length; ++i) {\n";
-            // if isChecked and no check button
-  stDeb += "          if (inputs[i].checked && inputs[i].id != 'buttonCheckAll') {\n";
-              // Debug for display inputs id
-  stDeb += "            console.log(''inputs[i].id: '' + inputs[i].id + ''');\n";
-              // Concatenate url from pwd
+  stDeb += "          if (inputs[i].checked && inputs[i].id != "+String('"')+"buttonCheckAll"+'"'+") {\n";
+  stDeb += "            console.log("+String('"')+"inputs[i].id: '"+String('"')+" + inputs[i].id +"+String('"')+"'"+String('"')+");\n";
   stDeb += "            concatenateUrlForDownload =\n";
-  stDeb += "              removeLastDirectoryPartOf(hostUrl) + '/' + inputs[i].id;\n";
+  stDeb += "              removeLastDirectoryPartOf(HOST_URL) +" + String('"')+'/'+String('"') + "+ inputs[i].id;\n";
   stDeb += "            console.log(\n";
-  stDeb += "              'concatenateUrlForDownload: '' + concatenateUrlForDownload + ''\n";
+  stDeb += "              "+String('"')+"concatenateUrlForDownload: '"+String('"')+" + concatenateUrlForDownload +" + String('"')+"'"+String('"')+"\n";
   stDeb += "            );\n";
-              // Download files
-              // TODO
-              //downloadURI(concatenateUrlForDownload, inputs[i].id);
-  stDeb += "            download(concatenateUrlForDownload, 'file4.txt');\n";
+            // Download files
+            // TODO
+            //downloadURI(concatenateUrlForDownload, inputs[i].id);
+  stDeb += "            downloadURI(concatenateUrlForDownload, inputs[i].id);\n";
   stDeb += "          }\n";
   stDeb += "        }\n";
-          // Debug display full object
-          //console.log(inputs);
+            // Debug display full object
+            //console.log(inputs);
   stDeb += "      }\n";
+//
   stDeb += "    </script>\n";
   stDeb += "  </head>\n";
   
@@ -129,37 +135,37 @@ void initVarHtml()
   stDeb += "  <body>\n";
   stDeb += "    <div>\n";
   stDeb += "      <div>\n";
-  stDeb += "        <h1 class='center'>Serveur de fichiers</h1>\n";
+  stDeb += "        <h1 class="+String('"')+"center"+String('"')+">Serveur de fichiers</h1>\n";
   stDeb += "      </div>\n";
   stDeb += "      <div>\n";
   stDeb += "        <h3>😼 FabLab made in Iki 😼</h3>\n";
   stDeb += "      </div>\n";
-  stDeb += "      <br />\n";
   stDeb += "    </div>\n";
+  stDeb += "      <div class="+String('"')+"center"+String('"')+">\n";
+//  stDeb += "        <br />\n";
+  stDeb += "        <input\n";
+  stDeb += "          onclick="+String('"')+"checkAndUncheck()"+'"'+"\n";
+  stDeb += "          type='button'\n";
+  stDeb += "          value='Tout cocher'\n";
+  stDeb += "          id='buttonCheckAll'\n";
+  stDeb += "        />\n";
+  stDeb += "        <button onclick="+String('"')+"downloadAllItems()"+'"'+" type="+'"'+"submit"+'"'+">\n";
+  stDeb += "          Tout télécharger\n";
+  stDeb += "        </button>\n";
+  stDeb += "      </div>\n";
+  stDeb += "      <br />\n";
   stDeb += "    <div>\n";
   stDeb += "      <div>\n";
-  stDeb += "        <table class='center'>\n";
+  stDeb += "        <table class="+String('"')+"center"+String('"')+">\n";
   stDeb += "          <thead>\n";
   stDeb += "            <tr>\n";
-  stDeb += "              <th colspan='2'>Documents disponibles</th>\n";
+  stDeb += "              <th colspan="+String('"')+"2"+String('"')+">Documents disponibles</th>\n";
   stDeb += "            </tr>\n";
   stDeb += "          </thead>\n";
   stDeb += "          <tbody>\n";
 
   stFin += "          </tbody>\n";
   stFin += "        </table>\n";
-  stFin += "      </div>\n";
-  stFin += "      <div class='center'>\n";
-  stFin += "        <br />\n";
-  stFin += "        <input\n";
-  stFin += "          onclick='checkAndUncheck()'\n";
-  stFin += "          type='button'\n";
-  stFin += "          value='Tout cocher'\n";
-  stFin += "          id='buttonCheckAll'\n";
-  stFin += "        />\n";
-  stFin += "        <button onclick='downloadAllItems()' type='submit'>\n";
-  stFin += "          Tout télécharger\n";
-  stFin += "        </button>\n";
   stFin += "      </div>\n";
   stFin += "    </div>\n";
   stFin += "  </body>\n";
@@ -198,7 +204,7 @@ void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
       if(levels)
         listDir(fs, file.name(), levels -1);
     } else {
-      st = '"'+String(file.name()).substring(1) + '"'+ "type='checkbox' /></td>";
+      st = '"'+String(file.name()).substring(1) + '"'+ "type="+String('"')+"checkbox"+String('"')+" /></td>";
       stList += "<tr><td><input id=" + st;
       st = String(file.name()).substring(1);
       stList += "<td>"+st+"</td></tr>\n";
