@@ -81,7 +81,8 @@ void initVarHtml()
   stDeb += "      function download(dataurl, filename) {\n";
   stDeb += "        const link = document.createElement("+String('"')+"a"+'"'+");\n";
   stDeb += "        link.href = dataurl;\n";
-  stDeb += "        link.download = filename;\n";
+//  stDeb += "        link.download = filename;\n";
+  stDeb += "        link.download = "+String("SD/")+"filename;\n";
   stDeb += "        link.click();\n";
   stDeb += "      }\n";
 //
@@ -119,9 +120,10 @@ void initVarHtml()
   stDeb += "            );\n";
             // Download files
             // TODO
-            //downloadURI(concatenateUrlForDownload, inputs[i].id);
+  stDeb += "alert(inputs[i].id);\n";
   stDeb += "            downloadURI(concatenateUrlForDownload, inputs[i].id);\n";
   stDeb += "          }\n";
+//  stDeb += " deleteFile(SD, "+String('"')+"/index.html"+String('"')+");\n";
   stDeb += "        }\n";
             // Debug display full object
             //console.log(inputs);
@@ -172,9 +174,7 @@ void initVarHtml()
   stFin += "</html>\n";
 
   stHTML = stDeb + stList + stFin;
-Serial.println("*****************");
-Serial.println(stHTML.c_str());
-Serial.println("*****************");
+  Serial.println(stHTML.c_str());
 };
 
 
@@ -184,8 +184,8 @@ Serial.println("*****************");
 // Functions
 void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
   String st = "";
+  String st0 = "";
   stList = ""; 
-  Serial.println("debut listdir");
   Serial.printf("Listing directory: %s\n", dirname);
 
   File root = fs.open(dirname);
@@ -204,14 +204,17 @@ void listDir(fs::FS &fs, const char * dirname, uint8_t levels){
       if(levels)
         listDir(fs, file.name(), levels -1);
     } else {
-      st = '"'+String(file.name()).substring(1) + '"'+ "type="+String('"')+"checkbox"+String('"')+" /></td>";
-      stList += "<tr><td><input id=" + st;
-      st = String(file.name()).substring(1);
-      stList += "<td>"+st+"</td></tr>\n";
+//        st0 = String(file.name());
+//        if (st0 != "/index.html"){
+        st0 = String(file.name()).substring(1);
+        if (st0 != "index.html"){
+          st = '"' + st0 + '"'+ "type="+String('"')+"checkbox"+String('"')+" /></td>";
+          stList += "<tr><td><input id=" + st;
+          stList += "<td>"+st0+"</td></tr>\n";
+        };
     }
     file = root.openNextFile();
   }
-  Serial.println("stList");
 }
 
 void createDir(fs::FS &fs, const char * path){
@@ -388,19 +391,14 @@ void setup(){
   Serial.begin(115200);
   initWiFi();
   initSDCard();
-  Serial.println("avant listDir");
   listDir(SD, "/", 0);
-  Serial.println("apres listDir");
   initVarHtml();
-  Serial.println("apres initVarHTML");
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     // index.html est dans /var/www/html/index.html
     // il contiendra toute le page css et html
     // avec avant mise à jour de la liste des fichiers obtenus avec dirlist
-  Serial.println("avant WriteFile");
     writeFile(SD, "/index.html", stHTML.c_str());
-  Serial.println("apres WriteFile");
     request->send(SD, "/index.html", "/text/)($html");
   });
 
